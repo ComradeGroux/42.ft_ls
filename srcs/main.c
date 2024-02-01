@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/01 10:59:49 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/01 14:59:57 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,18 @@
 int	main(int argc, char** argv)
 {
 	int	flag = init(argc, argv);
+
 	if (flag >= 0)
 	{
 		if(argc == 1)
-			ls(".", flag);
+		{
+			char*	tmp[] = { ".", ".", NULL};
+			ls(tmp, flag);
+		}
 		else if ((flag & FLAG_R) != 0) // if '-R' is active, ls must be subdirectories recursive
 			ls_recur("", flag);
 		else
-			ls("", flag);
+			ls(argv, flag);
 	}
 	else
 		switch (flag)
@@ -32,6 +36,7 @@ int	main(int argc, char** argv)
 				break;
 			case -2:
 				ft_error("Directory doesn't exist");
+				break;
 			default:
 				ft_error("Default error");
 				break;
@@ -39,23 +44,48 @@ int	main(int argc, char** argv)
 	return (0);
 }
 
-void	ls(char* path, int flag)
+void	printVal(struct dirent* currDir, int flag)
 {
-	(void)flag;
-	ft_printf("ls classique\n");
-	DIR*	fd_dir = opendir(path);
-
-	if (fd_dir == NULL)
+	if (flag & FLAG_a)
 	{
-		perror(strerror(errno));
-		return (-1);
+		ft_printf("%s  ", currDir->d_name);
 	}
-	
+	else if (currDir->d_name[0] != '.')
+	{
+		ft_printf("%s  ", currDir->d_name);
+	}
+}
+
+void	ls(char** argv, int flag)
+{
+	int	i = 1;
+
+
+	while (argv[i])
+	{
+		if (argv[i][0] != '-')
+		{
+			DIR*	fd_dir = opendir(argv[i]);
+
+			if (fd_dir == NULL)
+				return (perror(strerror(errno)));
+
+			struct dirent*	currDir = readdir(fd_dir);
+			while (currDir != NULL)
+			{
+				if (currDir->d_name[0] != '-')
+					printVal(currDir, flag);
+				currDir = readdir(fd_dir);
+			}
+		}
+		i++;
+	}
 }
 
 void	ls_recur(char* path, int flag)
 {
 	(void)flag;
+	(void)path;
 	ft_printf("ls recursif\n");
 }
 

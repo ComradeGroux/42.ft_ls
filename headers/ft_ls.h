@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/01 10:58:33 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/01 14:44:39 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@
 #define FLAG_MULTI			0b100000
 
 int		init(int argc, char** argv);
-void	ls(char* path, int flag);
+void	ls(char** argv, int flag);
 void	ls_recur(char* path, int flag);
 void	ft_error(char* str);
