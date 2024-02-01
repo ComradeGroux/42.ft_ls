@@ -6,13 +6,14 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/01 09:57:17 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/01 10:58:33 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "libft.h"
+#include <errno.h>
 #include <sys/types.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -41,6 +42,6 @@
 #define FLAG_MULTI			0b100000
 
 int		init(int argc, char** argv);
-void	ls(int flag);
-void	ls_recur(int flag);
+void	ls(char* path, int flag);
+void	ls_recur(char* path, int flag);
 void	ft_error(char* str);

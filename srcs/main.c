@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/01 10:21:28 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/01 10:59:49 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,45 @@
 int	main(int argc, char** argv)
 {
 	int	flag = init(argc, argv);
-	printf("flag is %d\n", flag);
-	if (flag != -1)
+	if (flag >= 0)
 	{
-		if ((flag & FLAG_R) != 0) // if '-R' is active, ls must be subdirectories recursive
-			ls_recur(flag);
+		if(argc == 1)
+			ls(".", flag);
+		else if ((flag & FLAG_R) != 0) // if '-R' is active, ls must be subdirectories recursive
+			ls_recur("", flag);
 		else
-			ls(flag);
+			ls("", flag);
 	}
 	else
-		ft_error("An error occured during the init");
+		switch (flag)
+		{
+			case -1:
+				ft_error("Flag doesn't exist");
+				break;
+			case -2:
+				ft_error("Directory doesn't exist");
+			default:
+				ft_error("Default error");
+				break;
+		}
 	return (0);
 }
 
-void	ls(int flag)
+void	ls(char* path, int flag)
 {
 	(void)flag;
 	ft_printf("ls classique\n");
+	DIR*	fd_dir = opendir(path);
+
+	if (fd_dir == NULL)
+	{
+		perror(strerror(errno));
+		return (-1);
+	}
+	
 }
 
-void	ls_recur(int flag)
+void	ls_recur(char* path, int flag)
 {
 	(void)flag;
 	ft_printf("ls recursif\n");
@@ -66,6 +85,13 @@ int	init(int argc, char** argv)
 		{
 			if (argv[i][0] != '-')
 			{
+				// int		x = 0;
+				// char*	str = argv[i];
+
+				// while (str[x] && !ft_isspace(str[x]))
+				// 	x++;
+				// if (str[x] != '\0')
+				// 	return (-2);
 				i++;
 				continue;
 			}
