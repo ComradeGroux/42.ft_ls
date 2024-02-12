@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/12 16:05:32 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/12 17:40:35 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void	ls(char** argv, int flag, char** envp)
 
 	while (argv[i])
 	{
+		t_list*	head = NULL;
+		
 		already_printed = false;
 		if (argv[i][0] != '-')
 		{
@@ -89,15 +91,16 @@ void	ls(char** argv, int flag, char** envp)
 
 			struct dirent*	currDir;
 			while ((currDir = readdir(fd_dir)))
-			{
-				if ((already_printed) && (currDir->d_name[0] != '.' || flag & FLAG_a))
-					ft_printf("  ");
-				if (printVal(currDir, flag))
-					already_printed = true;
-			}
+				ft_lstadd_back(&head, ft_lstnew(currDir));
 		}
+		if (flag & FLAG_t)
+			sortTime(&head);
+		else
+			sortAlpha(&head);
+		if (flag & FLAG_r)
+			sortReverse(&head);
+		printList(&head, flag, &already_printed);
 		ft_printf("\n");
-
 		i++;
 	}
 	if (!already_printed)
@@ -188,4 +191,16 @@ void	ft_error(char* str)
 	ft_putendl_fd(str, 2);
 	ft_putstr_fd("Usage: ", 2);
 	ft_putendl_fd(MAN_LS, 2);
+}
+
+void	printList(t_list **head, int flag, bool* already_printed)
+{
+	t_list*	curr = *head;
+	while (curr->next != NULL)
+	{
+		if ((already_printed) && (curr->content->d_name[0] != '.' || flag & FLAG_a))
+			ft_printf("  ");
+		if (printVal(curr->content, flag))
+			*already_printed = true;
+	}
 }

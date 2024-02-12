@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/12 15:42:35 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/12 17:40:03 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,3 +46,8 @@ int		init(int argc, char** argv);
 void	ls(char** argv, int flag, char** envp);
 void	ls_recur(char* path, int flag, char** envp);
 void	ft_error(char* str);
+void	printList(t_list **head, int flag, bool* already_printed);
+
+void	sortTime(t_list **head);
+void	sortAlpha(t_list **head);
+void	sortReverse(t_list **head);

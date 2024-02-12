@@ -6,7 +6,7 @@
 #    By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 14:09:53 by vgroux            #+#    #+#              #
-#    Updated: 2024/02/01 09:15:01 by vgroux           ###   ########.fr        #
+#    Updated: 2024/02/12 17:22:13 by vgroux           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ CFLAGS =     -Wall -Wextra -Werror
 RM =         rm -f
 
 SRCS =		ft_atoi.c \
+			ft_atof.c \
 			ft_atol.c \
 			ft_bzero.c \
 			ft_calloc.c \
