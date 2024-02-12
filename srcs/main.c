@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/12 15:58:40 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/12 16:02:45 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	ls(char** argv, int flag, char** envp)
 			DIR*	fd_dir = opendir(argv[i]);
 
 			if (fd_dir == NULL)
-				return (perror(strerror(errno)));
+				return ((void)ft_printf("ft_ls: cannot access '%s': %s\n", argv[i], strerror(errno)));
 
 			struct dirent*	currDir;
 			while ((currDir = readdir(fd_dir)))
