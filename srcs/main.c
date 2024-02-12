@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/12 17:40:35 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/12 17:42:41 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,9 +198,10 @@ void	printList(t_list **head, int flag, bool* already_printed)
 	t_list*	curr = *head;
 	while (curr->next != NULL)
 	{
-		if ((already_printed) && (curr->content->d_name[0] != '.' || flag & FLAG_a))
+		if ((already_printed) && (((struct dirent*)curr->content)->d_name[0] != '.' || flag & FLAG_a))
 			ft_printf("  ");
 		if (printVal(curr->content, flag))
 			*already_printed = true;
+		curr = curr->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:27:17 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/12 17:28:13 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/12 17:41:51 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	sortTime(t_list **head)
 {
-
+	(void)head;
 }
 
 void	sortAlpha(t_list **head)
 {
-
+	(void)head;
 }
 
 void	sortReverse(t_list **head)
 {
-
+	(void)head;
 }
