@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/12 16:02:45 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/12 16:05:32 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,20 @@ void	ls(char** argv, int flag, char** envp)
 	while (argv[i])
 	{
 		already_printed = false;
-		if (flag & FLAG_MULTI && i != 1)
-			ft_printf("\n%s:\n", argv[i]);
-		else if (flag & FLAG_MULTI)
-		{
-			ft_printf("%s:\n", argv[i]);
-		}
 		if (argv[i][0] != '-')
 		{
 			DIR*	fd_dir = opendir(argv[i]);
 
 			if (fd_dir == NULL)
-				return ((void)ft_printf("ft_ls: cannot access '%s': %s\n", argv[i], strerror(errno)));
+			{
+				ft_printf("ft_ls: cannot access '%s': %s", argv[i], strerror(errno));
+				i++;
+				continue;
+			}
+			if (flag & FLAG_MULTI && i != 1)
+				ft_printf("\n%s:\n", argv[i]);
+			else if (flag & FLAG_MULTI)
+				ft_printf("%s:\n", argv[i]);
 
 			struct dirent*	currDir;
 			while ((currDir = readdir(fd_dir)))
