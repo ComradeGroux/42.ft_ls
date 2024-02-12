@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/01 14:44:39 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/12 15:42:35 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #define MAN_LS "./ft_ls [OPTION]... [FILE]...\n\
 [OPTION] are: \n\
@@ -42,6 +43,6 @@
 #define FLAG_MULTI			0b100000
 
 int		init(int argc, char** argv);
-void	ls(char** argv, int flag);
-void	ls_recur(char* path, int flag);
+void	ls(char** argv, int flag, char** envp);
+void	ls_recur(char* path, int flag, char** envp);
 void	ft_error(char* str);

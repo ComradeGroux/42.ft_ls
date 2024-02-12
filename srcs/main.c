@@ -6,13 +6,14 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/01 14:59:57 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/12 15:58:40 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdio.h>
 
-int	main(int argc, char** argv)
+int	main(int argc, char** argv, char** envp)
 {
 	int	flag = init(argc, argv);
 
@@ -21,14 +22,15 @@ int	main(int argc, char** argv)
 		if(argc == 1)
 		{
 			char*	tmp[] = { ".", ".", NULL};
-			ls(tmp, flag);
+			ls(tmp, flag, envp);
 		}
 		else if ((flag & FLAG_R) != 0) // if '-R' is active, ls must be subdirectories recursive
-			ls_recur("", flag);
+			ls_recur("", flag, envp);
 		else
-			ls(argv, flag);
+			ls(argv, flag, envp);
 	}
 	else
+	{
 		switch (flag)
 		{
 			case -1:
@@ -41,28 +43,41 @@ int	main(int argc, char** argv)
 				ft_error("Default error");
 				break;
 		}
+	}
 	return (0);
 }
 
-void	printVal(struct dirent* currDir, int flag)
+bool	printVal(struct dirent* currDir, int flag)
 {
 	if (flag & FLAG_a)
 	{
-		ft_printf("%s  ", currDir->d_name);
+		ft_printf("%s", currDir->d_name);
+		return true;
 	}
 	else if (currDir->d_name[0] != '.')
 	{
-		ft_printf("%s  ", currDir->d_name);
+		ft_printf("%s", currDir->d_name);
+		return true;
 	}
+	return false;
 }
 
-void	ls(char** argv, int flag)
+void	ls(char** argv, int flag, char** envp)
 {
-	int	i = 1;
+	(void)envp;
 
+	int		i = 1;
+	bool	already_printed = false;
 
 	while (argv[i])
 	{
+		already_printed = false;
+		if (flag & FLAG_MULTI && i != 1)
+			ft_printf("\n%s:\n", argv[i]);
+		else if (flag & FLAG_MULTI)
+		{
+			ft_printf("%s:\n", argv[i]);
+		}
 		if (argv[i][0] != '-')
 		{
 			DIR*	fd_dir = opendir(argv[i]);
@@ -70,22 +85,31 @@ void	ls(char** argv, int flag)
 			if (fd_dir == NULL)
 				return (perror(strerror(errno)));
 
-			struct dirent*	currDir = readdir(fd_dir);
-			while (currDir != NULL)
+			struct dirent*	currDir;
+			while ((currDir = readdir(fd_dir)))
 			{
-				if (currDir->d_name[0] != '-')
-					printVal(currDir, flag);
-				currDir = readdir(fd_dir);
+				if ((already_printed) && (currDir->d_name[0] != '.' || flag & FLAG_a))
+					ft_printf("  ");
+				if (printVal(currDir, flag))
+					already_printed = true;
 			}
 		}
+		ft_printf("\n");
+
 		i++;
+	}
+	if (!already_printed)
+	{
+		char*	tmp[] = { ".", ".", NULL};
+		ls(tmp, flag, envp);
 	}
 }
 
-void	ls_recur(char* path, int flag)
+void	ls_recur(char* path, int flag, char** envp)
 {
 	(void)flag;
 	(void)path;
+	(void)envp;
 	ft_printf("ls recursif\n");
 }
 
@@ -102,7 +126,8 @@ void	ls_recur(char* path, int flag)
  */ 
 int	init(int argc, char** argv)
 {
-	int	flag = 0;
+	int		flag = 0;
+	bool	multi = false;
 
 	if (argc == 1)
 		return (0);
@@ -115,46 +140,39 @@ int	init(int argc, char** argv)
 		{
 			if (argv[i][0] != '-')
 			{
-				// int		x = 0;
-				// char*	str = argv[i];
-
-				// while (str[x] && !ft_isspace(str[x]))
-				// 	x++;
-				// if (str[x] != '\0')
-				// 	return (-2);
+				if (multi)
+					flag = flag | FLAG_MULTI;
 				i++;
+				multi = true;
 				continue;
 			}
-			else
+			j = 1;
+			while (argv[i][j])
 			{
-				j = 1;
-				while (argv[i][j])
+				char	c = argv[i][j];
+				
+				switch (c)
 				{
-					char	c = argv[i][j];
-					
-					switch (c)
-					{
-						case 'a':
-							flag = flag | FLAG_a;
-							break;
-						case 'l':
-							flag = flag | FLAG_l;
-							break;
-						case 'R':
-							flag = flag | FLAG_R;
-							break;
-						case 'r':
-							flag = flag | FLAG_r;
-							break;
-						case 't':
-							flag = flag | FLAG_t;
-							break;
-						default:
-							return (-1);
-							break;
-					}
-					j++;
+					case 'a':
+						flag = flag | FLAG_a;
+						break;
+					case 'l':
+						flag = flag | FLAG_l;
+						break;
+					case 'R':
+						flag = flag | FLAG_R;
+						break;
+					case 'r':
+						flag = flag | FLAG_r;
+						break;
+					case 't':
+						flag = flag | FLAG_t;
+						break;
+					default:
+						return (-1);
+						break;
 				}
+				j++;
 			}
 			i++;
 		}
