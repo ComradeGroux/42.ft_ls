@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/12 17:40:03 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/14 15:05:37 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,17 @@
 #define FLAG_t				0b010000
 #define FLAG_MULTI			0b100000
 
-int		init(int argc, char** argv);
+int		main(int argc, char** argv, char** envp);
 void	ls(char** argv, int flag, char** envp);
 void	ls_recur(char* path, int flag, char** envp);
 void	ft_error(char* str);
+int		init(int argc, char** argv);
+
+void	printLong(struct dirent* currDir, int flag);
+bool	printVal(struct dirent* currDir, int flag);
 void	printList(t_list **head, int flag, bool* already_printed);
+void	printFileType(struct stat currStat);
+void	printFilePerm(struct stat currStat);
 
 void	sortTime(t_list **head);
 void	sortAlpha(t_list **head);

@@ -1,11 +1,13 @@
 # 42.ft_ls
 Reimplementation of 'ls' to learn more about the filesystem
 
+ls sort by default the file in an alphabetical order
+
 Some flags need to be implemented:
-	-a
+	-a	OK
 	-l
 	-R
-	-r
+	-r	OK
 	-t
 
 

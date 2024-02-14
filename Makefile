@@ -16,7 +16,8 @@ DIR_O =	objs/
 
 
 SRCS_LIST =	main.c \
-			sort.c
+			sort.c \
+			print.c
 
 SRCS =		${addprefix ${DIR_S}, ${SRCS_LIST}}
 

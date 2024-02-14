@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/14 13:17:15 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/14 15:03:54 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char** argv, char** envp)
 			char*	tmp[] = { ".", ".", NULL};
 			ls(tmp, flag, envp);
 		}
-		else if ((flag & FLAG_R) != 0) // if '-R' is active, ls must be subdirectories recursive
+		else if (flag & FLAG_R) // if '-R' is active, ls must be subdirectories recursive
 			ls_recur("", flag, envp);
 		else
 			ls(argv, flag, envp);
@@ -46,52 +46,36 @@ int	main(int argc, char** argv, char** envp)
 	return (0);
 }
 
-bool	printVal(struct dirent* currDir, int flag)
-{
-	if (flag & FLAG_a)
-	{
-		ft_printf("%s", currDir->d_name);
-		return true;
-	}
-	else if (currDir->d_name[0] != '.')
-	{
-		ft_printf("%s", currDir->d_name);
-		return true;
-	}
-	return false;
-}
-
 void	ls(char** argv, int flag, char** envp)
 {
 	(void)envp;
 
 	int		i = 1;
 	bool	already_printed = false;
+	t_list*	head = NULL;
 
 	while (argv[i])
 	{
-		t_list*	head = NULL;
-		
 		already_printed = false;
 		if (argv[i][0] != '-')
 		{
 			DIR*	fd_dir = opendir(argv[i]);
-
 			if (fd_dir == NULL)
 			{
 				ft_printf("ft_ls: cannot access '%s': %s", argv[i], strerror(errno));
 				i++;
 				continue;
 			}
+			struct dirent*	currDir;
+			while ((currDir = readdir(fd_dir)))
+				ft_lstadd_back(&head, ft_lstnew(currDir));
+			closedir(fd_dir);
+			
 			if (flag & FLAG_MULTI && i != 1)
 				ft_printf("\n%s:\n", argv[i]);
 			else if (flag & FLAG_MULTI)
 				ft_printf("%s:\n", argv[i]);
-
-			struct dirent*	currDir;
-			while ((currDir = readdir(fd_dir)))
-				ft_lstadd_back(&head, ft_lstnew(currDir));
-			already_printed = false;	
+				
 			if (flag & FLAG_t)
 				sortTime(&head);
 			else
@@ -192,17 +176,4 @@ void	ft_error(char* str)
 	ft_putendl_fd(str, 2);
 	ft_putstr_fd("Usage: ", 2);
 	ft_putendl_fd(MAN_LS, 2);
-}
-
-void	printList(t_list **head, int flag, bool* already_printed)
-{
-	t_list*	curr = *head;
-	while (curr != NULL)
-	{
-		if ((*already_printed) && (((struct dirent*)curr->content)->d_name[0] != '.' || flag & FLAG_a))
-			ft_printf("  ");
-		if (printVal(curr->content, flag))
-			*already_printed = true;
-		curr = curr->next;
-	}
 }
