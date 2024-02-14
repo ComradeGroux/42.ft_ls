@@ -6,12 +6,11 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/14 11:48:27 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/14 13:17:15 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-#include <stdio.h>
 
 int	main(int argc, char** argv, char** envp)
 {
@@ -92,6 +91,7 @@ void	ls(char** argv, int flag, char** envp)
 			struct dirent*	currDir;
 			while ((currDir = readdir(fd_dir)))
 				ft_lstadd_back(&head, ft_lstnew(currDir));
+			already_printed = false;	
 			if (flag & FLAG_t)
 				sortTime(&head);
 			else
@@ -100,8 +100,8 @@ void	ls(char** argv, int flag, char** envp)
 				sortReverse(&head);
 			printList(&head, flag, &already_printed);
 			ft_lst_free(&head);
+			ft_printf("\n");
 		}
-		ft_printf("\n");
 		i++;
 	}
 	if (!already_printed)
@@ -197,7 +197,7 @@ void	ft_error(char* str)
 void	printList(t_list **head, int flag, bool* already_printed)
 {
 	t_list*	curr = *head;
-	while (curr->next != NULL)
+	while (curr != NULL)
 	{
 		if ((*already_printed) && (((struct dirent*)curr->content)->d_name[0] != '.' || flag & FLAG_a))
 			ft_printf("  ");
