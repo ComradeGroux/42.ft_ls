@@ -6,7 +6,7 @@
 #    By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 14:09:53 by vgroux            #+#    #+#              #
-#    Updated: 2024/02/12 17:22:13 by vgroux           ###   ########.fr        #
+#    Updated: 2024/02/14 11:45:46 by vgroux           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS =		ft_atoi.c \
 			ft_isprint.c \
 			ft_isspace.c \
 			ft_itoa.c \
+			ft_lst_free.c \
 			ft_lstadd_back_bonus.c \
 			ft_lstadd_front_bonus.c \
 			ft_lstclear_bonus.c \

@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 12:20:07 by vgroux            #+#    #+#             */
-/*   Updated: 2022/12/24 15:40:23 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/14 11:46:05 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char		*ft_gnl_remove_old_line(char *buffer);
 int			ft_gnl_strchr(char *str);
 char		*ft_gnl_strjoin(char *line, char *buff);
 char		*ft_gnl_strndup(char *str, size_t end);
+void		ft_lst_free(t_list **head);
 void		ft_lstadd_back(t_list **lst, t_list *new);
 void		ft_lstadd_front(t_list **lst, t_list *new);
 void		ft_lstclear(t_list **lst, void (*del)(void *));

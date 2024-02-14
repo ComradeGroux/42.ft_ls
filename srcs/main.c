@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/14 11:35:33 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/14 11:48:27 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,15 @@ void	ls(char** argv, int flag, char** envp)
 			struct dirent*	currDir;
 			while ((currDir = readdir(fd_dir)))
 				ft_lstadd_back(&head, ft_lstnew(currDir));
+			if (flag & FLAG_t)
+				sortTime(&head);
+			else
+				sortAlpha(&head);
+			if (flag & FLAG_r)
+				sortReverse(&head);
+			printList(&head, flag, &already_printed);
+			ft_lst_free(&head);
 		}
-		if (flag & FLAG_t)
-			sortTime(&head);
-		else
-			sortAlpha(&head);
-		if (flag & FLAG_r)
-			sortReverse(&head);
-		printList(&head, flag, &already_printed);
 		ft_printf("\n");
 		i++;
 	}
