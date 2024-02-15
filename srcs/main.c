@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 17:11:40 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 17:12:30 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	ls_recur(char** argv, int flag, char** envp)
 			{
 				ft_printf("ft_ls: cannot access '%s': %s\n", argv[i], strerror(errno));
 				i++;
-				exit(1);
 				continue;
 			}
 			struct dirent*	currDir;
