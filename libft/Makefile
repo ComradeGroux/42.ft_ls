@@ -6,7 +6,7 @@
 #    By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 14:09:53 by vgroux            #+#    #+#              #
-#    Updated: 2024/02/15 10:55:11 by vgroux           ###   ########.fr        #
+#    Updated: 2024/02/15 14:13:33 by vgroux           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS =		ft_atoi.c \
 			ft_isspace.c \
 			ft_itoa.c \
 			ft_lst_free.c \
+			ft_lst_rm.c \
 			ft_lstadd_back_bonus.c \
 			ft_lstadd_front_bonus.c \
 			ft_lstclear_bonus.c \
@@ -37,7 +38,6 @@ SRCS =		ft_atoi.c \
 			ft_lstlast_bonus.c \
 			ft_lstmap_bonus.c \
 			ft_lstnew_bonus.c \
-			ft_lst_rm.c \
 			ft_lstsize_bonus.c \
 			ft_memchr.c \
 			ft_memcmp.c \
@@ -53,6 +53,7 @@ SRCS =		ft_atoi.c \
 			ft_putstr_fd.c \
 			ft_split.c \
 			ft_strchr.c \
+			ft_strcmp.c \
 			ft_strdup.c \
 			ft_striteri.c \
 			ft_strjoin.c \

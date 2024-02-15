@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 12:20:07 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 10:55:01 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 14:15:02 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void		ft_putnbr_fd(int n, int fd);
 void		ft_putstr_fd(char *s, int fd);
 char		**ft_split(const char *s, char c);
 char		*ft_strchr(const char *s, int c);
+int			ft_strcmp(char* s1, char* s2);
 char		*ft_strdup(const char *s1);
 void		ft_striteri(char *s, void (*f)(unsigned int, char *));
 char		*ft_strjoin(const char *s1, const char *s2);

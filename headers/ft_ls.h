@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/14 15:05:37 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 14:10:29 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	printList(t_list **head, int flag, bool* already_printed);
 void	printFileType(struct stat currStat);
 void	printFilePerm(struct stat currStat);
 
+void	sortList(t_list **head, int flag);
 void	sortTime(t_list **head);
-void	sortAlpha(t_list **head);
+t_list*	sortAlpha(t_list *head);
 void	sortReverse(t_list **head);

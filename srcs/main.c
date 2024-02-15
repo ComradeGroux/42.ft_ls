@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 11:00:40 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 14:05:41 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,7 @@ void	ls(char** argv, int flag, char** envp)
 				ft_printf("\n%s:\n", argv[i]);
 			else if (flag & FLAG_MULTI)
 				ft_printf("%s:\n", argv[i]);
-				
-			if (flag & FLAG_t)
-				sortTime(&head);
-			else
-				sortAlpha(&head);
-			if (flag & FLAG_r)
-				sortReverse(&head);
+			sortList(&head, flag);
 			printList(&head, flag, &already_printed);
 			ft_lst_free(&head);
 		}
