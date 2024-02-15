@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:27:17 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 14:17:50 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 14:37:30 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,43 @@ void	sortList(t_list **head, int flag)
 {
 	*head = sortAlpha(*head);
 	if (flag & FLAG_t)
-		sortTime(head);
+		*head = sortTime(*head);
 	if (flag & FLAG_r)
 		sortReverse(head);
 }
 
-void	sortTime(t_list **head)
+t_list*	sortTime(t_list *head)
 {
-	(void)head;
+	struct stat statCurr;
+	struct stat statNext;
+	if (!head)
+		return NULL;
+	if (stat(((struct dirent*)head->content)->d_name, &statCurr) != 0)
+		return NULL;
+	if (head->next == NULL)
+		return head;
+	if (stat(((struct dirent*)head->next->content)->d_name, &statNext) != 0)
+		return NULL;
+
+	time_t	timeCurr = statCurr.st_mtime;
+	time_t	timeNext = statNext.st_mtime;
+
+	if (head->next && timeNext > timeCurr)
+		head = swap(head, head->next);
+	head->next = sortTime(head->next);
+
+	if (stat(((struct dirent*)head->content)->d_name, &statCurr) != 0)
+		return NULL;
+	if (head->next && stat(((struct dirent*)head->next->content)->d_name, &statNext) != 0)
+		return NULL;
+	timeCurr = statCurr.st_mtime;
+	timeNext = statNext.st_mtime;
+	if (head->next && timeNext > timeCurr)
+	{
+		head = swap(head, head->next);
+		head->next = sortTime(head->next);
+	}
+	return (head);
 }
 
 t_list*	swap(t_list* n1, t_list* n2)
