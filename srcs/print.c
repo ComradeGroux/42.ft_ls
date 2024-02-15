@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 11:03:18 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 16:50:36 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@
  * 
  * dir name
 */
-void	printLong(struct dirent* currDir, int flag)
+void	printLong(char* dname, char* path, int flag)
 {
 	struct stat	currStat;
-	char*	dname = currDir->d_name;
-	if (stat(dname, &currStat) != -1)
+	if (stat(path, &currStat) != -1)
 	{
 		struct passwd	*user = getpwuid(currStat.st_uid);
 		struct group	*groupe = getgrgid(currStat.st_gid);
@@ -43,18 +42,18 @@ void	printLong(struct dirent* currDir, int flag)
 		{
 			printFileType(currStat);
 			printFilePerm(currStat);
-			ft_printf(" %d %s %s %d %s %s\n", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, currDir->d_name);
+			ft_printf(" %d %s %s %d %s %s\n", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, dname);
 		}
-		else if (currDir->d_name[0] != '.')
+		else if (dname[0] != '.')
 		{
 			printFileType(currStat);
 			printFilePerm(currStat);
-			ft_printf(" %d %s %s %d %s %s\n", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, currDir->d_name);
+			ft_printf(" %d %s %s %d %s %s\n", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, dname);
 		}
 		free(timer);
 	}
 	else
-		ft_printf("ERROR on %s\n", currDir->d_name);
+		ft_printf("Stat error on %s\n", path);
 }
 
 void	printFileType(struct stat currStat)
@@ -115,11 +114,11 @@ void	printFilePerm(struct stat currStat)
 		ft_putchar_fd('-', 1);
 }
 
-bool	printVal(struct dirent* currDir, int flag)
+bool	printVal(struct dirent* currDir, char* path, int flag)
 {
 	if (flag & FLAG_l)
 	{
-		printLong(currDir, flag);
+		printLong(currDir->d_name, path, flag);
 		return true;
 	}
 	else
@@ -149,7 +148,7 @@ void	printList(t_list **head, int flag, bool* already_printed)
 		{
 			if (flag & FLAG_a || ((struct dirent*)curr->content)->d_name[0] != '.')
 			{
-				if (stat(((struct dirent*)curr->content)->d_name, &currStat) != -1)
+				if (stat(curr->path, &currStat) != -1)
 					totalBlockSize += currStat.st_blocks;
 			}
 			curr = curr->next;
@@ -161,7 +160,7 @@ void	printList(t_list **head, int flag, bool* already_printed)
 	{
 		if ((*already_printed) && !(flag & FLAG_l) && (((struct dirent*)curr->content)->d_name[0] != '.' || flag & FLAG_a))
 			ft_printf("  ");
-		if (printVal(curr->content, flag))
+		if (printVal(curr->content, curr->path, flag))
 			*already_printed = true;
 		curr = curr->next;
 	}

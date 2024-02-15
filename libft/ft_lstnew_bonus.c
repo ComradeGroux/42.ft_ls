@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 21:54:38 by vgroux            #+#    #+#             */
-/*   Updated: 2022/10/18 12:33:55 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 15:55:00 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstnew(void *content)
+t_list	*ft_lstnew(void *content, char *path)
 {
 	t_list	*new;
 
@@ -20,6 +20,8 @@ t_list	*ft_lstnew(void *content)
 	if (!new)
 		return (NULL);
 	new->content = content;
+	new->path = malloc(sizeof(char) * ft_strlen(path) + 1);
+	new->path = path;
 	new->next = NULL;
 	return (new);
 }

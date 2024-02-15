@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 14:05:41 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 17:11:40 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ int	main(int argc, char** argv, char** envp)
 
 	if (flag >= 0)
 	{
-		if(argc == 1)
+		if (argc == 1)
 		{
 			char*	tmp[] = { ".", ".", NULL};
 			ls(tmp, flag, envp);
 		}
 		else if (flag & FLAG_R) // if '-R' is active, ls must be subdirectories recursive
-			ls_recur("", flag, envp);
+			ls_recur(argv, flag, envp);
 		else
 			ls(argv, flag, envp);
 	}
@@ -48,8 +48,6 @@ int	main(int argc, char** argv, char** envp)
 
 void	ls(char** argv, int flag, char** envp)
 {
-	(void)envp;
-
 	int		i = 1;
 	bool	already_printed = false;
 	t_list*	head = NULL;
@@ -68,7 +66,11 @@ void	ls(char** argv, int flag, char** envp)
 			}
 			struct dirent*	currDir;
 			while ((currDir = readdir(fd_dir)))
-				ft_lstadd_back(&head, ft_lstnew(currDir));
+			{
+				char*	path = argv[i];
+				path = ft_strjoin(path, "");
+				ft_lstadd_back(&head, ft_lstnew(currDir, path));
+			}
 			closedir(fd_dir);
 			
 			if (flag & FLAG_MULTI && i != 1)
@@ -88,12 +90,82 @@ void	ls(char** argv, int flag, char** envp)
 	}
 }
 
-void	ls_recur(char* path, int flag, char** envp)
+void	ls_recur(char** argv, int flag, char** envp)
 {
-	(void)flag;
-	(void)path;
-	(void)envp;
-	ft_printf("ls recursif\n");
+	int		i = 1;
+	bool	already_printed = false;
+	t_list*	head = NULL;
+
+	while (argv[i])
+	{
+		already_printed = false;
+		if (argv[i][0] != '-')
+		{
+			DIR*	fd_dir = opendir(argv[i]);
+			if (fd_dir == NULL)
+			{
+				ft_printf("ft_ls: cannot access '%s': %s\n", argv[i], strerror(errno));
+				i++;
+				exit(1);
+				continue;
+			}
+			struct dirent*	currDir;
+			while ((currDir = readdir(fd_dir)))
+			{
+				struct stat currStat;
+				char*	path = argv[i];
+				path = ft_strjoin(path, "/");
+				path = ft_strjoin(path, currDir->d_name);
+				if (stat(path, &currStat) != 0)
+				{
+					ft_printf("ft_ls: stat() error on '%s'\n", path);
+					i++;
+					continue;
+				}
+				if (S_ISDIR(currStat.st_mode))
+				{
+					if (flag & FLAG_a && ft_strcmp(currDir->d_name, ".") && ft_strcmp(currDir->d_name, ".."))
+					{
+						char*	tmp[] = {".", path, NULL};
+						if (already_printed)
+							ft_printf("\n%s:\n", path);
+						else
+							ft_printf("%s:\n", path);
+						already_printed = true;
+						ls_recur(tmp, flag, envp);
+					}
+					else if (ft_strncmp(currDir->d_name, ".", 1) != 0 && ft_strncmp(currDir->d_name, "..", 2) != 0)
+					{
+						char*	tmp[] = {".", path, NULL};
+						if (already_printed)
+							ft_printf("\n%s:\n", path);
+						else
+							ft_printf("%s:\n", path);
+						already_printed = true;
+						ls_recur(tmp, flag, envp);
+					}
+					// else if (ft_strcmp(currDir->d_name, ".") == 0)
+					// 	ft_printf("./:\n");
+				}
+				ft_lstadd_back(&head, ft_lstnew(currDir, path));
+			}
+			closedir(fd_dir);
+
+			// if (flag & FLAG_MULTI && i != 1)
+			// 	ft_printf("\n%s:\n", argv[i]);
+			// else if (flag & FLAG_MULTI)
+			// 	ft_printf("%s:\n", argv[i]);
+			sortList(&head, flag);
+			printList(&head, flag, &already_printed);
+			ft_lst_free(&head);
+		}
+		i++;
+	}
+	if (!already_printed)
+	{
+		char*	tmp[] = { ".", ".", NULL};
+		ls_recur(tmp, flag, envp);
+	}
 }
 
 /**

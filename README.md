@@ -6,9 +6,9 @@ ls sort by default the file in an alphabetical order
 Some flags need to be implemented:
 	-a	OK
 	-l	OK
-	-R
+	-R	OK
 	-r	OK
-	-t
+	-t	OK
 
 
 There are the allowed functions:

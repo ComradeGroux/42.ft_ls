@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:54:34 by vgroux            #+#    #+#             */
-/*   Updated: 2022/10/18 12:49:40 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 15:56:35 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	newlist = NULL;
 	while (lst)
 	{
-		newnode = ft_lstnew(f(lst->content));
+		newnode = ft_lstnew(f(lst->content), NULL);
 		if (!newnode)
 		{
 			ft_lstclear(&newlist, del);

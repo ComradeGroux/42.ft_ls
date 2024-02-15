@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 12:20:07 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 14:15:02 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 15:44:54 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 typedef struct s_list
 {
 	void			*content;
+	char			*path;
 	struct s_list	*next;
 }	t_list;
 
@@ -65,7 +66,7 @@ void		ft_lstdelone(t_list *lst, void (*del)(void *));
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstlast(t_list *lst);
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-t_list		*ft_lstnew(void *content);
+t_list		*ft_lstnew(void *content, char* path);
 int			ft_lstsize(t_list *lst);
 void		ft_lst_rm(t_list **head, t_list *toRm);
 void		*ft_memchr(const void *s, int c, size_t n);
