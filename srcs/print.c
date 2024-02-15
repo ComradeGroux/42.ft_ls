@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 10:47:29 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 11:00:18 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,18 @@ void	printLong(struct dirent* currDir, int flag)
 		{
 			printFileType(currStat);
 			printFilePerm(currStat);
-			ft_printf(" %d %s %s %d %s %s", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, currDir->d_name);
+			ft_printf(" %d %s %s %d %s %s\n", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, currDir->d_name);
 		}
 		else if (currDir->d_name[0] != '.')
 		{
 			printFileType(currStat);
 			printFilePerm(currStat);
-			ft_printf(" %d %s %s %d %s %s", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, currDir->d_name);
+			ft_printf(" %d %s %s %d %s %s\n", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, currDir->d_name);
 		}
 		free(timer);
 	}
 	else
 		ft_printf("ERROR\t%s", currDir->d_name);
-	ft_printf("\n");
 }
 
 void	printFileType(struct stat currStat)
@@ -160,7 +159,7 @@ void	printList(t_list **head, int flag, bool* already_printed)
 			curr = curr->next;
 		}
 		curr = *head;
-		ft_printf("total %d\n", totalBlockSize / 2);
+		ft_printf("total %d\n", totalBlockSize);
 	}
 	while (curr != NULL)
 	{

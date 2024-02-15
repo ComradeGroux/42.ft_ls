@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 10:30:46 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 10:54:41 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:58:36 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,17 @@
 
 void	ft_lst_rm(t_list **head, t_list *toRm)
 {
-	t_list	*old = NULL;
-	t_list	*curr = *head;
-	while (curr != NULL)
+	t_list	*next;
+
+	if (head && *head && toRm)
 	{
-		if (curr == toRm)
+		if (*head == toRm)
 		{
-			if (old != NULL)
-			{
-				old->next = curr->next;
-				free(curr);
-				curr = old->next;
-			}
-			else
-			{
-				
-			}
+			next = (*head)->next;
+			ft_lstdelone(head, NULL);
+			*head = next;
 		}
 		else
-		{
-			old = curr;
-			curr = curr->next;
-		}
+			ft_lst_rm(&((*head)->next), toRm);
 	}
 }

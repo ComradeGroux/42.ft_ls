@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/14 15:03:54 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 11:00:40 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	ls(char** argv, int flag, char** envp)
 				sortReverse(&head);
 			printList(&head, flag, &already_printed);
 			ft_lst_free(&head);
-			ft_printf("\n");
 		}
 		i++;
 	}
