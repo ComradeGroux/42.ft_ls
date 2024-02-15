@@ -6,7 +6,7 @@
 #    By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 14:09:53 by vgroux            #+#    #+#              #
-#    Updated: 2024/02/14 11:45:46 by vgroux           ###   ########.fr        #
+#    Updated: 2024/02/15 10:55:11 by vgroux           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRCS =		ft_atoi.c \
 			ft_lstlast_bonus.c \
 			ft_lstmap_bonus.c \
 			ft_lstnew_bonus.c \
+			ft_lst_rm.c \
 			ft_lstsize_bonus.c \
 			ft_memchr.c \
 			ft_memcmp.c \
