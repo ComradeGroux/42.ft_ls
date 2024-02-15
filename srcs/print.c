@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/14 16:37:08 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:47:29 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,22 @@ bool	printVal(struct dirent* currDir, int flag)
 void	printList(t_list **head, int flag, bool* already_printed)
 {
 	t_list*	curr = *head;
+	if (flag & FLAG_l)
+	{
+		int	totalBlockSize = 0;
+		struct stat	currStat;
+		while (curr != NULL)
+		{
+			if (flag & FLAG_a || ((struct dirent*)curr->content)->d_name[0] != '.')
+			{
+				if (stat(((struct dirent*)curr->content)->d_name, &currStat) != -1)
+					totalBlockSize += currStat.st_blocks;
+			}
+			curr = curr->next;
+		}
+		curr = *head;
+		ft_printf("total %d\n", totalBlockSize / 2);
+	}
 	while (curr != NULL)
 	{
 		if ((*already_printed) && !(flag & FLAG_l) && (((struct dirent*)curr->content)->d_name[0] != '.' || flag & FLAG_a))
