@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 11:00:18 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/15 11:03:18 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,8 @@ void	printLong(struct dirent* currDir, int flag)
 {
 	struct stat	currStat;
 	char*	dname = currDir->d_name;
-	// ft_printf("%s\t", dname);
 	if (stat(dname, &currStat) != -1)
 	{
-		// printf("%s\t", currDir->d_name);
 		struct passwd	*user = getpwuid(currStat.st_uid);
 		struct group	*groupe = getgrgid(currStat.st_gid);
 		char*			ctimer = ctime(&(currStat.st_mtime));
@@ -56,7 +54,7 @@ void	printLong(struct dirent* currDir, int flag)
 		free(timer);
 	}
 	else
-		ft_printf("ERROR\t%s", currDir->d_name);
+		ft_printf("ERROR on %s\n", currDir->d_name);
 }
 
 void	printFileType(struct stat currStat)
@@ -121,8 +119,6 @@ bool	printVal(struct dirent* currDir, int flag)
 {
 	if (flag & FLAG_l)
 	{
-		// Print in long format
-		// Will probably use stat() and so
 		printLong(currDir, flag);
 		return true;
 	}
