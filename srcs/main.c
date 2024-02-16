@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 17:12:30 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/16 12:02:13 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,17 +143,11 @@ void	ls_recur(char** argv, int flag, char** envp)
 						already_printed = true;
 						ls_recur(tmp, flag, envp);
 					}
-					// else if (ft_strcmp(currDir->d_name, ".") == 0)
-					// 	ft_printf("./:\n");
 				}
 				ft_lstadd_back(&head, ft_lstnew(currDir, path));
 			}
 			closedir(fd_dir);
 
-			// if (flag & FLAG_MULTI && i != 1)
-			// 	ft_printf("\n%s:\n", argv[i]);
-			// else if (flag & FLAG_MULTI)
-			// 	ft_printf("%s:\n", argv[i]);
 			sortList(&head, flag);
 			printList(&head, flag, &already_printed);
 			ft_lst_free(&head);
