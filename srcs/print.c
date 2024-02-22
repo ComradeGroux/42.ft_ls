@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 16:50:36 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/21 15:29:23 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 void	printLong(char* dname, char* path, int flag)
 {
 	struct stat	currStat;
-	if (stat(path, &currStat) != -1)
+	if (lstat(path, &currStat) != -1)
 	{
 		struct passwd	*user = getpwuid(currStat.st_uid);
 		struct group	*groupe = getgrgid(currStat.st_gid);
@@ -40,13 +40,13 @@ void	printLong(char* dname, char* path, int flag)
 
 		if (flag & FLAG_a)
 		{
-			printFileType(currStat);
+			printFileType(&currStat);
 			printFilePerm(currStat);
 			ft_printf(" %d %s %s %d %s %s\n", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, dname);
 		}
 		else if (dname[0] != '.')
 		{
-			printFileType(currStat);
+			printFileType(&currStat);
 			printFilePerm(currStat);
 			ft_printf(" %d %s %s %d %s %s\n", currStat.st_nlink, user->pw_name, groupe->gr_name, currStat.st_size, timer, dname);
 		}
@@ -54,22 +54,35 @@ void	printLong(char* dname, char* path, int flag)
 	}
 	else
 		ft_printf("Stat error on %s\n", path);
+	free(path);
 }
 
-void	printFileType(struct stat currStat)
+void	printFileType(struct stat *currStat)
 {
-	if (S_ISDIR(currStat.st_mode))
-		ft_putchar_fd('d', 1);	
-	else if (S_ISREG(currStat.st_mode))
-		ft_putchar_fd('-', 1);
-	else if (S_ISLNK(currStat.st_mode))
-		ft_putchar_fd('l', 1);
-	else if (S_ISCHR(currStat.st_mode))
-		ft_putchar_fd('c', 1);
-	else if (S_ISBLK(currStat.st_mode))
-		ft_putchar_fd('b', 1);
-	else if (S_ISFIFO(currStat.st_mode))
-		ft_putchar_fd('p', 1);
+	switch (currStat->st_mode & S_IFMT)
+	{
+		case S_IFLNK:
+			ft_putchar_fd('l', 1);
+			break;
+		case S_IFCHR:
+			ft_putchar_fd('c', 1);
+			break;
+		case S_IFBLK:
+			ft_putchar_fd('b', 1);
+			break;
+		case S_IFIFO:
+			ft_putchar_fd('p', 1);
+			break;
+		case S_IFDIR:
+			ft_putchar_fd('d', 1);	
+			break;
+		case S_IFSOCK:
+			ft_putchar_fd('s', 1);
+			break;
+		default:
+			ft_putchar_fd('-', 1);
+			break;
+	}
 }
 
 void	printFilePerm(struct stat currStat)
@@ -118,7 +131,7 @@ bool	printVal(struct dirent* currDir, char* path, int flag)
 {
 	if (flag & FLAG_l)
 	{
-		printLong(currDir->d_name, path, flag);
+		printLong(currDir->d_name, ft_strjoin(path, currDir->d_name), flag);
 		return true;
 	}
 	else
@@ -146,22 +159,37 @@ void	printList(t_list **head, int flag, bool* already_printed)
 		struct stat	currStat;
 		while (curr != NULL)
 		{
+			
+			char*	path = ft_strjoin(curr->path, ((struct dirent*)curr->content)->d_name);
 			if (flag & FLAG_a || ((struct dirent*)curr->content)->d_name[0] != '.')
 			{
-				if (stat(curr->path, &currStat) != -1)
+				if (lstat(path, &currStat) != -1)
 					totalBlockSize += currStat.st_blocks;
 			}
+			else
+			{
+				if (((struct dirent*)curr->content)->d_name[0] != '.')
+				{
+					if (lstat(path, &currStat) != -1)
+						totalBlockSize += currStat.st_blocks;
+				}
+			}
+			free(path);
 			curr = curr->next;
 		}
 		curr = *head;
+		if (already_printed == false)
+			ft_printf("\n");
 		ft_printf("total %d\n", totalBlockSize);
+		*already_printed = true;
 	}
 	while (curr != NULL)
 	{
-		if ((*already_printed) && !(flag & FLAG_l) && (((struct dirent*)curr->content)->d_name[0] != '.' || flag & FLAG_a))
-			ft_printf("  ");
 		if (printVal(curr->content, curr->path, flag))
-			*already_printed = true;
+		{
+			if (!(flag & FLAG_l))
+				ft_putendl_fd("", 1);
+		}
 		curr = curr->next;
 	}
 }

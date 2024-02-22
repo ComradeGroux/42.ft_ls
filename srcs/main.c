@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/16 12:02:13 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/21 16:25:17 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,9 @@ void	ls(char** argv, int flag, char** envp)
 			while ((currDir = readdir(fd_dir)))
 			{
 				char*	path = argv[i];
-				path = ft_strjoin(path, "");
+				path = ft_strjoin(path, "/");
 				ft_lstadd_back(&head, ft_lstnew(currDir, path));
 			}
-			closedir(fd_dir);
 			
 			if (flag & FLAG_MULTI && i != 1)
 				ft_printf("\n%s:\n", argv[i]);
@@ -79,6 +78,8 @@ void	ls(char** argv, int flag, char** envp)
 				ft_printf("%s:\n", argv[i]);
 			sortList(&head, flag);
 			printList(&head, flag, &already_printed);
+			
+			closedir(fd_dir);
 			ft_lst_free(&head);
 		}
 		i++;
@@ -146,10 +147,10 @@ void	ls_recur(char** argv, int flag, char** envp)
 				}
 				ft_lstadd_back(&head, ft_lstnew(currDir, path));
 			}
-			closedir(fd_dir);
 
 			sortList(&head, flag);
 			printList(&head, flag, &already_printed);
+			closedir(fd_dir);
 			ft_lst_free(&head);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 15:49:05 by vgroux           ###   ########.fr       */
+/*   Updated: 2024/02/21 15:00:24 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include "libft.h"
 #include <errno.h>
 #include <sys/types.h>
-#include <dirent.h>
 #include <sys/stat.h>
+#include <dirent.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
@@ -51,7 +51,7 @@ int		init(int argc, char** argv);
 void	printLong(char* dname, char* path, int flag);
 bool	printVal(struct dirent* currDir, char* path, int flag);
 void	printList(t_list **head, int flag, bool* already_printed);
-void	printFileType(struct stat currStat);
+void	printFileType(struct stat *currStat);
 void	printFilePerm(struct stat currStat);
 
 t_list*	swap(t_list* n1, t_list* n2);

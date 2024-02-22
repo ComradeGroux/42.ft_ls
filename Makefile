@@ -6,7 +6,7 @@ RESET = \033[0m
 NAME =     ft_ls
 
 CC =         gcc
-CFLAGS =     -Wall -Wextra -Werror -O3
+CFLAGS =     -Wall -Wextra -Werror -g
 RM =         rm -rf
 
 DIR_H = headers/
@@ -33,7 +33,7 @@ LIBS = ${FT_LNK}
 
 ${NAME}: ${LIBFT} ${OBJS}
 	@echo "$(RESET)[$(GREENGREEN)${NAME}$(RESET)]: ${NAME} Objects were created${GREY}"
-	${CC} ${OBJS} ${LIBS} -o ${NAME}
+	${CC} ${CFLAGS} ${OBJS} ${LIBS} -o ${NAME}
 	@echo "$(RESET)[$(GREENGREEN)${NAME}$(RESET)]: ${NAME} created !"
 
 ${LIBFT}:
@@ -46,7 +46,7 @@ all: ${NAME}
 ${DIR_O}%.o:${DIR_S}%.c
 	@printf "\033[38;5;240m"
 	@mkdir -p ${DIR_O}
-	${CC} ${CFLAGS} ${KEYCODES} ${LIBFT_INC} ${MLX_INC} -I ${DIR_H} -o $@ -c $<
+	${CC} ${CFLAGS} -g ${LIBFT_INC} -I ${DIR_H} -o $@ -c $<
 
 clean:
 	@echo "$(RED) ██████╗██╗     ███████╗ █████╗ ███╗   ██╗██╗███╗   ██╗ ██████╗$(RESET)"

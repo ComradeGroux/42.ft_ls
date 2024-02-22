@@ -5,7 +5,7 @@ ls sort by default the file in an alphabetical order
 
 Some flags need to be implemented:
 	-a	OK
-	-l	OK
+	-l	OK	FORMATAGE DATE A FAIRE + ALIGNEMENT CORRECT
 	-R	OK
 	-r	OK
 	-t	OK
