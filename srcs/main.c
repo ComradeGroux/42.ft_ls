@@ -1,5 +1,4 @@
 /* ************************************************************************** */
-/*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -11,6 +10,22 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+void printFlag(int flag)
+{
+	if (flag & FLAG_R)
+		ft_printf("R");
+	if (flag & FLAG_a)
+		ft_printf("a");
+	if (flag & FLAG_l)
+		ft_printf("l");
+	if (flag & FLAG_r)
+		ft_printf("r");
+	if (flag & FLAG_t)
+		ft_printf("t");
+	if (flag & FLAG_MULTI)
+		ft_printf("\nls on multiple files/directories");
+}
 
 int	main(int argc, char** argv, char** envp)
 {
