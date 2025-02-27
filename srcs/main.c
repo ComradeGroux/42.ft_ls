@@ -30,151 +30,81 @@ void printFlag(int flag)
 int	main(int argc, char** argv, char** envp)
 {
 	int	flag = init(argc, argv);
-
-	if (flag >= 0)
-	{
-		if (argc == 1)
-		{
-			char*	tmp[] = { ".", ".", NULL};
-			ls(tmp, flag, envp);
-		}
-		else if (flag & FLAG_R) // if '-R' is active, ls must be subdirectories recursive
-			ls_recur(argv, flag, envp);
-		else
-			ls(argv, flag, envp);
-	}
-	else
+	if (flag < 0)
 	{
 		switch (flag)
 		{
 			case -1:
 				ft_error("Flag doesn't exist");
 				break;
-			case -2:
-				ft_error("Directory doesn't exist");
-				break;
 			default:
 				ft_error("Default error");
 				break;
 		}
 	}
-	return (0);
-}
 
-void	ls(char** argv, int flag, char** envp)
-{
-	int		i = 1;
-	bool	already_printed = false;
-	t_list*	head = NULL;
-
+	int i = 1;
+	bool hasTarget = false;
 	while (argv[i])
 	{
-		already_printed = false;
 		if (argv[i][0] != '-')
 		{
-			DIR*	fd_dir = opendir(argv[i]);
-			if (fd_dir == NULL)
-			{
-				ft_printf("ft_ls: cannot access '%s': %s", argv[i], strerror(errno));
-				i++;
-				continue;
-			}
-			struct dirent*	currDir;
-			while ((currDir = readdir(fd_dir)))
-			{
-				char*	path = argv[i];
-				path = ft_strjoin(path, "/");
-				ft_lstadd_back(&head, ft_lstnew(currDir, path));
-			}
-			
-			if (flag & FLAG_MULTI && i != 1)
-				ft_printf("\n%s:\n", argv[i]);
-			else if (flag & FLAG_MULTI)
-				ft_printf("%s:\n", argv[i]);
-			sortList(&head, flag);
-			printList(&head, flag, &already_printed);
-			
-			closedir(fd_dir);
-			ft_lst_free(&head);
+			hasTarget = true;
+			break;
 		}
 		i++;
 	}
-	if (!already_printed)
+
+	if (hasTarget == false)
 	{
 		char*	tmp[] = { ".", ".", NULL};
 		ls(tmp, flag, envp);
 	}
+	else
+		ls(argv, flag, envp);
+
+	return (0);
 }
 
-void	ls_recur(char** argv, int flag, char** envp)
+void getEntries(char *argv, char** envp, t_list **head)
 {
-	int		i = 1;
-	bool	already_printed = false;
+	(void)envp;
+	DIR* fd_dir = opendir(argv);
+
+	if (fd_dir == NULL)
+	{
+		ft_printf("ft_ls: cannot access '%s': %s", argv, strerror(errno));
+		return;
+	}
+	
+	struct dirent*	currDir;
+	while ((currDir = readdir(fd_dir)))
+	{
+		char*	path = argv;
+		path = ft_strjoin(path, "/");
+		ft_lstadd_back(head, ft_lstnew(currDir, path));
+	}
+
+	closedir(fd_dir);
+}
+
+void	ls(char** argv, int flag, char** envp)
+{
+	int			i = 1;
 	t_list*	head = NULL;
 
 	while (argv[i])
 	{
-		already_printed = false;
 		if (argv[i][0] != '-')
 		{
-			DIR*	fd_dir = opendir(argv[i]);
-			if (fd_dir == NULL)
-			{
-				ft_printf("ft_ls: cannot access '%s': %s\n", argv[i], strerror(errno));
-				i++;
-				continue;
-			}
-			struct dirent*	currDir;
-			while ((currDir = readdir(fd_dir)))
-			{
-				struct stat currStat;
-				char*	path = argv[i];
-				path = ft_strjoin(path, "/");
-				path = ft_strjoin(path, currDir->d_name);
-				if (stat(path, &currStat) != 0)
-				{
-					ft_printf("ft_ls: stat() error on '%s'\n", path);
-					i++;
-					continue;
-				}
-				if (S_ISDIR(currStat.st_mode))
-				{
-					if (flag & FLAG_a && ft_strcmp(currDir->d_name, ".") && ft_strcmp(currDir->d_name, ".."))
-					{
-						char*	tmp[] = {".", path, NULL};
-						if (already_printed)
-							ft_printf("\n%s:\n", path);
-						else
-							ft_printf("%s:\n", path);
-						already_printed = true;
-						ls_recur(tmp, flag, envp);
-					}
-					else if (ft_strncmp(currDir->d_name, ".", 1) != 0 && ft_strncmp(currDir->d_name, "..", 2) != 0)
-					{
-						char*	tmp[] = {".", path, NULL};
-						if (already_printed)
-							ft_printf("\n%s:\n", path);
-						else
-							ft_printf("%s:\n", path);
-						already_printed = true;
-						ls_recur(tmp, flag, envp);
-					}
-				}
-				ft_lstadd_back(&head, ft_lstnew(currDir, path));
-			}
-
+			getEntries(argv[i], envp, &head);
 			sortList(&head, flag);
-			printList(&head, flag, &already_printed);
-			closedir(fd_dir);
+			printList(&head, flag, false);
 			ft_lst_free(&head);
 		}
 		i++;
 	}
-	if (!already_printed)
-	{
-		char*	tmp[] = { ".", ".", NULL};
-		ls_recur(tmp, flag, envp);
-	}
+
 }
 
 /**
@@ -250,4 +180,5 @@ void	ft_error(char* str)
 	ft_putendl_fd(str, 2);
 	ft_putstr_fd("Usage: ", 2);
 	ft_putendl_fd(MAN_LS, 2);
+	exit(1);
 }

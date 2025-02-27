@@ -183,6 +183,7 @@ void	printList(t_list **head, int flag, bool* already_printed)
 		ft_printf("total %d\n", totalBlockSize);
 		*already_printed = true;
 	}
+
 	while (curr != NULL)
 	{
 		if (printVal(curr->content, curr->path, flag))

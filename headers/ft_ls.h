@@ -44,7 +44,6 @@
 
 int		main(int argc, char** argv, char** envp);
 void	ls(char** argv, int flag, char** envp);
-void	ls_recur(char** argv, int flag, char** envp);
 void	ft_error(char* str);
 int		init(int argc, char** argv);
 
