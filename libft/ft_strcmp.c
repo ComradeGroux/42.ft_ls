@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 14:12:34 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 14:14:57 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/03/04 13:40:40 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 int	ft_strcmp(char* s1, char* s2)
 {
-	size_t	i;
-
-	i = 0;
-	while (s1[i] && s2[i] && s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
+	if (!s1 || !s2)
+		return (s1 == s2 ? 0 : (s1 ? 1 : -1));
+		
+	size_t	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

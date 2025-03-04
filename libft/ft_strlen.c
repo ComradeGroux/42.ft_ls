@@ -14,6 +14,9 @@
 
 size_t	ft_strlen(const char *s)
 {
+	if (!s)
+		return 0;
+
 	unsigned int	i;
 
 	i = 0;
