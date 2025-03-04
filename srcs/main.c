@@ -99,12 +99,22 @@ void	ls(char** argv, int flag, char** envp)
 		{
 			getEntries(argv[i], envp, &head);
 			sortList(&head, flag);
-			printList(&head, flag, false);
+			bool already_printed = false;
+			printList(&head, flag, &already_printed);
+
+			if (flag & FLAG_R)
+			{
+				t_list** head_recur = &head;
+				while (*head_recur)
+				{
+
+					*head_recur = (*head_recur)->next;
+				}
+			}
 			ft_lst_free(&head);
 		}
 		i++;
 	}
-
 }
 
 /**
