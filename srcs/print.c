@@ -178,7 +178,7 @@ void	printList(t_list **head, int flag, bool* already_printed)
 			curr = curr->next;
 		}
 		curr = *head;
-		if (already_printed == false)
+		if (*already_printed == false)
 			ft_printf("\n");
 		ft_printf("total %d\n", totalBlockSize);
 		*already_printed = true;
@@ -189,8 +189,10 @@ void	printList(t_list **head, int flag, bool* already_printed)
 		if (printVal(curr->content, curr->path, flag))
 		{
 			if (!(flag & FLAG_l))
-				ft_putendl_fd("", 1);
+				ft_putendl_fd("  ", 1);
 		}
 		curr = curr->next;
 	}
+
+	
 }

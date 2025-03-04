@@ -66,10 +66,19 @@ t_list*	sortAlpha(t_list *head)
 {
 	if (!head)
 		return NULL;
-	if (head->next && ft_strcmp(((struct dirent*)head->content)->d_name, ((struct dirent*)head->next->content)->d_name) > 0)
+	else if (!((struct dirent*)head->content)->d_name)
+		return NULL;
+
+	if (!head->next)
+		return head;
+	else if (!((struct dirent*)head->content)->d_name)
+		return head;
+
+	if (ft_strcmp(((struct dirent*)head->content)->d_name, ((struct dirent*)head->next->content)->d_name) > 0)
 		head = swap(head, head->next);
 	head->next = sortAlpha(head->next);
-	if (head->next && ft_strcmp(((struct dirent*)head->content)->d_name, ((struct dirent*)head->next->content)->d_name) > 0)
+
+	if (ft_strcmp(((struct dirent*)head->content)->d_name, ((struct dirent*)head->next->content)->d_name) > 0)
 	{
 		head = swap(head, head->next);
 		head->next = sortAlpha(head->next);
