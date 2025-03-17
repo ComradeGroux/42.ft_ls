@@ -6,7 +6,7 @@
 #    By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 14:09:53 by vgroux            #+#    #+#              #
-#    Updated: 2024/02/15 14:13:33 by vgroux           ###   ########.fr        #
+#    Updated: 2025/03/17 12:58:01 by vgroux           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ SRCS =		ft_atoi.c \
 			ft_split.c \
 			ft_strchr.c \
 			ft_strcmp.c \
+			ft_strcmp_uncase.c \
 			ft_strdup.c \
 			ft_striteri.c \
 			ft_strjoin.c \

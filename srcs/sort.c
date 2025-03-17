@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:27:17 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/15 14:37:30 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/03/17 13:09:56 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ t_list*	sortAlpha(t_list *head)
 	else if (!((struct dirent*)head->content)->d_name)
 		return head;
 
-	if (ft_strcmp(((struct dirent*)head->content)->d_name, ((struct dirent*)head->next->content)->d_name) > 0)
+	if (ft_strcmp_uncase(((struct dirent*)head->content)->d_name, ((struct dirent*)head->next->content)->d_name) > 0)
 		head = swap(head, head->next);
 	head->next = sortAlpha(head->next);
 
-	if (ft_strcmp(((struct dirent*)head->content)->d_name, ((struct dirent*)head->next->content)->d_name) > 0)
+	if (ft_strcmp_uncase(((struct dirent*)head->content)->d_name, ((struct dirent*)head->next->content)->d_name) > 0)
 	{
 		head = swap(head, head->next);
 		head->next = sortAlpha(head->next);
