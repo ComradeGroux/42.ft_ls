@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/21 15:29:23 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/03/17 14:14:15 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,20 +159,13 @@ void	printList(t_list **head, int flag, bool* already_printed)
 		struct stat	currStat;
 		while (curr != NULL)
 		{
-			
 			char*	path = ft_strjoin(curr->path, ((struct dirent*)curr->content)->d_name);
+			ft_printf("%s\n", path);
+
 			if (flag & FLAG_a || ((struct dirent*)curr->content)->d_name[0] != '.')
 			{
 				if (lstat(path, &currStat) != -1)
 					totalBlockSize += currStat.st_blocks;
-			}
-			else
-			{
-				if (((struct dirent*)curr->content)->d_name[0] != '.')
-				{
-					if (lstat(path, &currStat) != -1)
-						totalBlockSize += currStat.st_blocks;
-				}
 			}
 			free(path);
 			curr = curr->next;
