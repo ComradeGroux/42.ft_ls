@@ -107,6 +107,19 @@ void	ls(char** argv, int flag, char** envp)
 				t_list** head_recur = &head;
 				while (*head_recur)
 				{
+					struct stat currStat;
+					char*	path = ft_strjoin(head_recur->path, head_recur->content->d_name);
+					if (lstat(path, &currStat) != -1)
+					{
+						if (currStat->st_mode & S_IFMT == S_IFDIR)
+						{
+							char *tmp[] = {".", path, NULL};
+
+							ft_printf("%s:", path + 2); // Path +2 pour avoid ./
+							ls(tmp, flag, envp);
+						}
+					}
+					free(path);
 
 					*head_recur = (*head_recur)->next;
 				}
@@ -137,7 +150,6 @@ int	init(int argc, char** argv)
 		return (0);
 	else
 	{
-		int	j;
 		int	i = 1;
 
 		while (argv[i])
@@ -150,7 +162,8 @@ int	init(int argc, char** argv)
 				multi = true;
 				continue;
 			}
-			j = 1;
+
+			int j = 1;
 			while (argv[i][j])
 			{
 				char	c = argv[i][j];
