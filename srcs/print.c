@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2025/03/17 15:49:51 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/03/26 20:37:42 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ void	printList(t_list **head, int flag, bool* already_printed)
 		while (curr != NULL)
 		{
 			char*	path = ft_strjoin(curr->path, ((struct dirent*)curr->content)->d_name);
-			ft_printf("%s\n", path);
 
 			if (flag & FLAG_a || ((struct dirent*)curr->content)->d_name[0] != '.')
 			{
@@ -179,7 +178,6 @@ void	printList(t_list **head, int flag, bool* already_printed)
 
 	while (curr != NULL)
 	{
-		ft_printf("%s\t", ((struct dirent*)curr->content)->d_name);
 		if (printVal(curr->content, curr->path, flag))
 		{
 			if (!(flag & FLAG_l))

@@ -1,11 +1,12 @@
 /* ************************************************************************** */
+/*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 09:05:28 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/21 16:25:17 by vgroux           ###   ########.fr       */
+/*   Created: 2024/02/21 16:25:17 by vgroux            #+#    #+#             */
+/*   Updated: 2025/03/26 20:38:44 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +108,32 @@ void	ls(char** argv, int flag, char** envp)
 				t_list** head_recur = &head;
 				while (*head_recur)
 				{
+					if (ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, ".") == 0)
+					{
+						*head_recur = (*head_recur)->next;
+						continue;
+					}
+					else if (ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, "..") == 0)
+					{
+						*head_recur = (*head_recur)->next;
+						continue;
+					}
+					else if (!(flag & FLAG_a) && ((struct dirent*)(*head_recur)->content)->d_name[0] == '.')
+					{
+						*head_recur = (*head_recur)->next;
+						continue;
+					}
+
+					
 					struct stat currStat;
-					char*	path = ft_strjoin(head_recur->path, head_recur->content->d_name);
+					char*	path = ft_strjoin((*head_recur)->path, ((struct dirent*)(*head_recur)->content)->d_name);
 					if (lstat(path, &currStat) != -1)
 					{
-						if (currStat->st_mode & S_IFMT == S_IFDIR)
+						if ((currStat.st_mode & S_IFMT) == S_IFDIR)
 						{
 							char *tmp[] = {".", path, NULL};
 
-							ft_printf("%s:", path + 2); // Path +2 pour avoid ./
+							ft_printf("\n%s:\n", path + 2); // Path +2 pour avoid ./
 							ls(tmp, flag, envp);
 						}
 					}
