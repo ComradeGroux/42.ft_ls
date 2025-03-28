@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2024/02/21 15:00:24 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/03/28 17:39:13 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		init(int argc, char** argv);
 
 void	printLong(char* dname, char* path, int flag);
 bool	printVal(struct dirent* currDir, char* path, int flag);
-void	printList(t_list **head, int flag, bool* already_printed);
+void	printList(t_list **head, int flag);
 void	printFileType(struct stat *currStat);
 void	printFilePerm(struct stat currStat);
 

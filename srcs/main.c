@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 16:25:17 by vgroux            #+#    #+#             */
-/*   Updated: 2025/03/26 20:38:44 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/03/28 18:19:46 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void getEntries(char *argv, char** envp, t_list **head)
 
 	if (fd_dir == NULL)
 	{
-		ft_printf("ft_ls: cannot access '%s': %s", argv, strerror(errno));
+		ft_printf("ft_ls: cannot access '%s': %s\n", argv, strerror(errno));
 		return;
 	}
 	
@@ -82,7 +82,8 @@ void getEntries(char *argv, char** envp, t_list **head)
 	while ((currDir = readdir(fd_dir)))
 	{
 		char*	path = argv;
-		path = ft_strjoin(path, "/");
+		if (path[ft_strlen(path) - 1] != '/')
+			path = ft_strjoin(path, "/");
 		ft_lstadd_back(head, ft_lstnew(currDir, path));
 	}
 
@@ -100,30 +101,20 @@ void	ls(char** argv, int flag, char** envp)
 		{
 			getEntries(argv[i], envp, &head);
 			sortList(&head, flag);
-			bool already_printed = false;
-			printList(&head, flag, &already_printed);
+			printList(&head, flag);
 
 			if (flag & FLAG_R)
 			{
 				t_list** head_recur = &head;
 				while (*head_recur)
 				{
-					if (ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, ".") == 0)
+					if (ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, ".") == 0 ||
+						ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, "..") == 0 ||
+						(!(flag & FLAG_a) && ((struct dirent*)(*head_recur)->content)->d_name[0] == '.'))
 					{
 						*head_recur = (*head_recur)->next;
 						continue;
 					}
-					else if (ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, "..") == 0)
-					{
-						*head_recur = (*head_recur)->next;
-						continue;
-					}
-					else if (!(flag & FLAG_a) && ((struct dirent*)(*head_recur)->content)->d_name[0] == '.')
-					{
-						*head_recur = (*head_recur)->next;
-						continue;
-					}
-
 					
 					struct stat currStat;
 					char*	path = ft_strjoin((*head_recur)->path, ((struct dirent*)(*head_recur)->content)->d_name);
@@ -131,10 +122,15 @@ void	ls(char** argv, int flag, char** envp)
 					{
 						if ((currStat.st_mode & S_IFMT) == S_IFDIR)
 						{
-							char *tmp[] = {".", path, NULL};
+							char *tmp[] = {".", ft_strdup(path + 2), NULL};
+							ft_printf("\n%s:\n", tmp[1]);
 
-							ft_printf("\n%s:\n", path + 2); // Path +2 pour avoid ./
+							/**
+							 * CEST ICI QUE CA MEEEEERDE
+							*/
 							ls(tmp, flag, envp);
+
+							free(tmp[1]);
 						}
 					}
 					free(path);
@@ -148,17 +144,6 @@ void	ls(char** argv, int flag, char** envp)
 	}
 }
 
-/**
- * 	ls "-a" "-l"			OK
- * 	ls -al					OK
- * 	ls -aaaaaaaaaaa -l		OK
- * 	ls " -a"				failed
- * 	ls "-a -l"				failed
- * 	ls "-a" -l "headers/"	OK
- * 	ls "-a" -l "headers/ "	failed
- * 	ls headers/ -a			OK
- * 	ls headers/ -a srcs/ -l	OK
- */ 
 int	init(int argc, char** argv)
 {
 	int		flag = 0;

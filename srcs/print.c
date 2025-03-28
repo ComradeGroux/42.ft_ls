@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2025/03/26 20:37:42 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/03/28 18:18:52 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ bool	printVal(struct dirent* currDir, char* path, int flag)
 	return false;
 }
 
-void	printList(t_list **head, int flag, bool* already_printed)
+void	printList(t_list **head, int flag)
 {
 	t_list*	curr = *head;
 	if (flag & FLAG_l)
@@ -170,10 +170,7 @@ void	printList(t_list **head, int flag, bool* already_printed)
 			curr = curr->next;
 		}
 		curr = *head;
-		if (*already_printed == false)
-			ft_printf("\n");
 		ft_printf("total %d\n", totalBlockSize / 2);
-		*already_printed = true;
 	}
 
 	while (curr != NULL)
