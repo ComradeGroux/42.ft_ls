@@ -26,10 +26,12 @@
  * 
  * modification/creation date and time
  * 
- * dir name
+ * file name
 */
 void	printLong(char* dname, char* path, int flag)
 {
+	printf("in printLong: dname = '%s'\tpath = '%s'\n", dname, path);
+
 	struct stat	currStat;
 	if (lstat(path, &currStat) != -1)
 	{
@@ -87,6 +89,21 @@ void	printFileType(struct stat *currStat)
 
 void	printFilePerm(struct stat currStat)
 {
+	// User permissions
+	(currStat.st_mode & S_IRUSR) ? ft_putchar_fd('r', 1) : ft_putchar_fd('-', 1);
+	(currStat.st_mode & S_IWUSR) ? ft_putchar_fd('w', 1) : ft_putchar_fd('-', 1);
+	(currStat.st_mode & S_IXUSR) ? ft_putchar_fd('x', 1) : ft_putchar_fd('-', 1);
+
+	// Group permissions
+	(currStat.st_mode & S_IRGRP) ? ft_putchar_fd('r', 1) : ft_putchar_fd('-', 1);
+	(currStat.st_mode & S_IWGRP) ? ft_putchar_fd('w', 1) : ft_putchar_fd('-', 1);
+	(currStat.st_mode & S_IXGRP) ? ft_putchar_fd('x', 1) : ft_putchar_fd('-', 1);
+
+	// Others permissions
+	(currStat.st_mode & S_IROTH) ? ft_putchar_fd('r', 1) : ft_putchar_fd('-', 1);
+	(currStat.st_mode & S_IWOTH) ? ft_putchar_fd('w', 1) : ft_putchar_fd('-', 1);
+	(currStat.st_mode & S_IXOTH) ? ft_putchar_fd('x', 1) : ft_putchar_fd('-', 1);
+/*
 	if (currStat.st_mode & S_IRUSR)
 		ft_putchar_fd('r', 1);
 	else
@@ -99,7 +116,6 @@ void	printFilePerm(struct stat currStat)
 		ft_putchar_fd('x', 1);
 	else
 		ft_putchar_fd('-', 1);
-
 	if (currStat.st_mode & S_IRGRP)
 		ft_putchar_fd('r', 1);
 	else
@@ -112,7 +128,6 @@ void	printFilePerm(struct stat currStat)
 		ft_putchar_fd('x', 1);
 	else
 		ft_putchar_fd('-', 1);
-
 	if (currStat.st_mode & S_IROTH)
 		ft_putchar_fd('r', 1);
 	else
@@ -125,13 +140,18 @@ void	printFilePerm(struct stat currStat)
 		ft_putchar_fd('x', 1);
 	else
 		ft_putchar_fd('-', 1);
+*/
 }
 
 bool	printVal(struct dirent* currDir, char* path, int flag)
 {
 	if (flag & FLAG_l)
 	{
-		printLong(currDir->d_name, ft_strjoin(path, currDir->d_name), flag);
+		char str* = ft_strjoin(path, currDir->d_name);
+		printf("before printLong: dname = '%s'\tpath = '%s'\n", currDir->d_name, str);
+		printLong(currDir->d_name, str, flag);
+
+		// printLong(currDir->d_name, ft_strjoin(path, currDir->d_name), flag);
 		return true;
 	}
 	else
@@ -150,43 +170,44 @@ bool	printVal(struct dirent* currDir, char* path, int flag)
 	return false;
 }
 
-void	printList(t_list **head, int flag, bool* already_printed)
+void	countBlock(t_list **head, int flag, bool* already_printed)
 {
 	t_list*	curr = *head;
-	if (flag & FLAG_l)
+	int	totalBlockSize = 0;
+	struct stat	currStat;
+	while (curr != NULL)
 	{
-		int	totalBlockSize = 0;
-		struct stat	currStat;
-		while (curr != NULL)
+		if (flag & FLAG_a || ((struct dirent*)curr->content)->d_name[0] != '.')
 		{
 			char*	path = ft_strjoin(curr->path, ((struct dirent*)curr->content)->d_name);
 			ft_printf("%s\n", path);
+			
+			if (lstat(path, &currStat) != -1)
+				totalBlockSize += currStat.st_blocks;
 
-			if (flag & FLAG_a || ((struct dirent*)curr->content)->d_name[0] != '.')
-			{
-				if (lstat(path, &currStat) != -1)
-					totalBlockSize += currStat.st_blocks;
-			}
 			free(path);
-			curr = curr->next;
 		}
-		curr = *head;
-		if (*already_printed == false)
-			ft_printf("\n");
-		ft_printf("total %d\n", totalBlockSize / 2);
-		*already_printed = true;
+		
+		curr = curr->next;
 	}
+	if (*already_printed == false)
+		ft_printf("\n");
+	ft_printf("total %d\n", totalBlockSize / 2);
+	*already_printed = true;
+}
 
+void	printList(t_list **head, int flag, bool* already_printed)
+{
+	if (flag & FLAG_l)
+		countBlock(head, flag, already_printed);
+
+	t_list*	curr = *head;
 	while (curr != NULL)
 	{
 		ft_printf("%s\t", ((struct dirent*)curr->content)->d_name);
-		if (printVal(curr->content, curr->path, flag))
-		{
-			if (!(flag & FLAG_l))
-				ft_putendl_fd("  ", 1);
-		}
+
+		if (printVal(curr->content, curr->path, flag) && !(flag & FLAG_l))
+			ft_putendl_fd("  ", 1);
 		curr = curr->next;
 	}
-
-	
 }
