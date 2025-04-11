@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 16:25:17 by vgroux            #+#    #+#             */
-/*   Updated: 2025/03/28 18:19:46 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/04/11 15:58:31 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,43 +104,47 @@ void	ls(char** argv, int flag, char** envp)
 			printList(&head, flag);
 
 			if (flag & FLAG_R)
-			{
-				t_list** head_recur = &head;
-				while (*head_recur)
-				{
-					if (ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, ".") == 0 ||
-						ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, "..") == 0 ||
-						(!(flag & FLAG_a) && ((struct dirent*)(*head_recur)->content)->d_name[0] == '.'))
-					{
-						*head_recur = (*head_recur)->next;
-						continue;
-					}
-					
-					struct stat currStat;
-					char*	path = ft_strjoin((*head_recur)->path, ((struct dirent*)(*head_recur)->content)->d_name);
-					if (lstat(path, &currStat) != -1)
-					{
-						if ((currStat.st_mode & S_IFMT) == S_IFDIR)
-						{
-							char *tmp[] = {".", ft_strdup(path + 2), NULL};
-							ft_printf("\n%s:\n", tmp[1]);
+				recurs_traitement(&head, flag, envp);
 
-							/**
-							 * CEST ICI QUE CA MEEEEERDE
-							*/
-							ls(tmp, flag, envp);
-
-							free(tmp[1]);
-						}
-					}
-					free(path);
-
-					*head_recur = (*head_recur)->next;
-				}
-			}
 			ft_lst_free(&head);
 		}
 		i++;
+	}
+}
+
+void recurs_traitement(t_list** head, int flag, char** envp)
+{
+	t_list** head_recur = head;
+	while (*head_recur)
+	{
+		if (ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, ".") == 0 ||
+			ft_strcmp(((struct dirent*)(*head_recur)->content)->d_name, "..") == 0 ||
+			(!(flag & FLAG_a) && ((struct dirent*)(*head_recur)->content)->d_name[0] == '.'))
+		{
+			*head_recur = (*head_recur)->next;
+			continue;
+		}
+
+		struct stat currStat;
+		char*	path = ft_strjoin((*head_recur)->path, ((struct dirent*)(*head_recur)->content)->d_name);
+		if (lstat(path, &currStat) != -1)
+		{
+			if ((currStat.st_mode & S_IFMT) == S_IFDIR)
+			{
+				char *tmp[] = {".", ft_strdup(path + 2), NULL};
+				// ft_printf("\n%s:\n", tmp[1]);
+
+				/**
+				 * CEST ICI QUE CA MEEEEERDE
+				*/
+				ls(tmp, flag, envp);
+
+				free(tmp[1]);
+			}
+		}
+		free(path);
+
+		*head_recur = (*head_recur)->next;
 	}
 }
 

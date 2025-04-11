@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2025/03/28 17:39:13 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/04/11 15:58:01 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 
 int		main(int argc, char** argv, char** envp);
 void	ls(char** argv, int flag, char** envp);
+void recurs_traitement(t_list** head, int flag, char** envp);
 void	ft_error(char* str);
 int		init(int argc, char** argv);
 
