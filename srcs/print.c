@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2025/04/11 15:52:29 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:16:05 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ bool	printVal(struct dirent* currDir, char* path, int flag)
 	return false;
 }
 
-void	countBlock(t_list **head, int flag)
+void	countBlock(t_list **head, int flag, bool* already_printed)
 {
 	t_list*	curr = *head;
 	int	totalBlockSize = 0;
@@ -136,23 +136,24 @@ void	countBlock(t_list **head, int flag)
 		if (flag & FLAG_a || ((struct dirent*)curr->content)->d_name[0] != '.')
 		{
 			char*	path = ft_strjoin(curr->path, ((struct dirent*)curr->content)->d_name);
-			ft_printf("%s\n", path);
-			
 			if (lstat(path, &currStat) != -1)
 				totalBlockSize += currStat.st_blocks;
-
 			free(path);
 		}
 		
 		curr = curr->next;
 	}
-	ft_printf("\ntotal %d\n", totalBlockSize / 2);
+
+	if (*already_printed)
+		ft_printf("\n");
+	*already_printed = true;
+	ft_printf("total %d\n", totalBlockSize / 2);
 }
 
-void	printList(t_list **head, int flag)
+void	printList(t_list **head, int flag, bool* already_printed)
 {
 	if (flag & FLAG_l)
-		countBlock(head, flag);
+		countBlock(head, flag, already_printed);
 
 	t_list*	curr = *head;
 	while (curr != NULL)

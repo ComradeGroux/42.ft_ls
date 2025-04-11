@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:26:20 by vgroux            #+#    #+#             */
-/*   Updated: 2025/04/11 15:58:01 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:10:13 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@
 #define FLAG_MULTI			0b100000
 
 int		main(int argc, char** argv, char** envp);
-void	ls(char** argv, int flag, char** envp);
-void recurs_traitement(t_list** head, int flag, char** envp);
+void	ls(char** argv, int flag, char** envp, bool* already_printed);
+void 	recurs_traitement(t_list** head, int flag, char** envp, bool* already_printed);
 void	ft_error(char* str);
 int		init(int argc, char** argv);
 
 void	printLong(char* dname, char* path, int flag);
 bool	printVal(struct dirent* currDir, char* path, int flag);
-void	printList(t_list **head, int flag);
+void	printList(t_list **head, int flag, bool* already_printed);
 void	printFileType(struct stat *currStat);
 void	printFilePerm(struct stat currStat);
 

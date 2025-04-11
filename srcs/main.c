@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 16:25:17 by vgroux            #+#    #+#             */
-/*   Updated: 2025/04/11 15:58:31 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:15:54 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,25 @@ int	main(int argc, char** argv, char** envp)
 		}
 	}
 
-	int i = 1;
+	int i = 0;
 	bool hasTarget = false;
-	while (argv[i])
+	while (argv[++i])
 	{
 		if (argv[i][0] != '-')
 		{
 			hasTarget = true;
 			break;
 		}
-		i++;
 	}
 
-	if (hasTarget == false)
+	bool already_printed = false;
+	if (hasTarget)
+		ls(argv, flag, envp, &already_printed);
+	else
 	{
 		char*	tmp[] = { ".", ".", NULL};
-		ls(tmp, flag, envp);
+		ls(tmp, flag, envp, &already_printed);
 	}
-	else
-		ls(argv, flag, envp);
 
 	return (0);
 }
@@ -90,7 +90,7 @@ void getEntries(char *argv, char** envp, t_list **head)
 	closedir(fd_dir);
 }
 
-void	ls(char** argv, int flag, char** envp)
+void	ls(char** argv, int flag, char** envp, bool* already_printed)
 {
 	int			i = 1;
 	t_list*	head = NULL;
@@ -101,10 +101,10 @@ void	ls(char** argv, int flag, char** envp)
 		{
 			getEntries(argv[i], envp, &head);
 			sortList(&head, flag);
-			printList(&head, flag);
+			printList(&head, flag, already_printed);
 
 			if (flag & FLAG_R)
-				recurs_traitement(&head, flag, envp);
+				recurs_traitement(&head, flag, envp, already_printed);
 
 			ft_lst_free(&head);
 		}
@@ -112,7 +112,7 @@ void	ls(char** argv, int flag, char** envp)
 	}
 }
 
-void recurs_traitement(t_list** head, int flag, char** envp)
+void recurs_traitement(t_list** head, int flag, char** envp, bool* already_printed)
 {
 	t_list** head_recur = head;
 	while (*head_recur)
@@ -137,7 +137,7 @@ void recurs_traitement(t_list** head, int flag, char** envp)
 				/**
 				 * CEST ICI QUE CA MEEEEERDE
 				*/
-				ls(tmp, flag, envp);
+				ls(tmp, flag, envp, already_printed);
 
 				free(tmp[1]);
 			}
