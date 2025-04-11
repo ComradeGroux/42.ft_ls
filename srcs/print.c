@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2025/04/11 16:16:05 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:29:38 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,14 +152,22 @@ void	countBlock(t_list **head, int flag, bool* already_printed)
 
 void	printList(t_list **head, int flag, bool* already_printed)
 {
+	t_list*	curr = *head;
+	if (flag & FLAG_R)
+	{
+		if (*already_printed)
+			ft_printf("\n%s:", curr->path);
+		else
+			ft_printf("%s:\n", curr->path);
+	}
+	
 	if (flag & FLAG_l)
 		countBlock(head, flag, already_printed);
 
-	t_list*	curr = *head;
 	while (curr != NULL)
 	{
 		if (printVal(curr->content, curr->path, flag) && !(flag & FLAG_l))
-			ft_putendl_fd("  ", 1);
+			ft_printf("\t");
 		curr = curr->next;
 	}
 }
