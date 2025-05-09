@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 16:25:17 by vgroux            #+#    #+#             */
-/*   Updated: 2025/04/11 16:25:53 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/05/09 20:30:28 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,14 +132,7 @@ void recurs_traitement(t_list** head, int flag, char** envp, bool* already_print
 			if ((currStat.st_mode & S_IFMT) == S_IFDIR)
 			{
 				char *tmp[] = {".", ft_strdup(path + 2), NULL};
-				// ft_printf("\n%s:\n", tmp[1]);
-
-				// ft_printf("%s:\n", path);
-				/**
-				 * CEST ICI QUE CA MEEEEERDE
-				*/
 				ls(tmp, flag, envp, already_printed);
-
 				free(tmp[1]);
 			}
 		}

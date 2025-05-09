@@ -6,7 +6,7 @@
 /*   By: vgroux <vgroux@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:54:14 by vgroux            #+#    #+#             */
-/*   Updated: 2025/04/11 16:29:38 by vgroux           ###   ########.fr       */
+/*   Updated: 2025/05/09 20:53:12 by vgroux           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,8 @@ void	printList(t_list **head, int flag, bool* already_printed)
 
 	while (curr != NULL)
 	{
-		if (printVal(curr->content, curr->path, flag) && !(flag & FLAG_l))
-			ft_printf("\t");
+		if (printVal(curr->content, curr->path, flag) && !(flag & FLAG_l) && curr->next)
+			ft_printf("  ");
 		curr = curr->next;
 	}
 }
